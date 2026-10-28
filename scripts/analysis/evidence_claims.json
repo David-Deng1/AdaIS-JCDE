@@ -1,0 +1,641 @@
+{
+  "_doc": "Claim list for evidence_claims.py (D8-2). Numbers are never written here: each claim points at rows of the analysis outputs, and the script reads, formats and checks them. 'expect' is the sign the wording asserts for a row (+ favours AdaIS, - favours the comparator, 0 no detectable difference, >=0 / <=0 not worse / not better); 'role' primary rows set the status, context rows are shown and checked only for contradiction. 'status' is the status the wording claims; the script recomputes it and stops on a mismatch. 'paper': false marks claims of the submitted manuscript that are withdrawn (kept for the review version only); 'vs_review3' says where the claim departs from the 10-24 review, section 3 (cell-level CIs), after the seed-cluster decision of section 8. Sections: B Benchmark, E1 aero P-balanced, E2 aero P-edge, E8 aero nominal ablation, E7 common corruption, E9a VoI all-channel posterior, E5 host, E6u parameter uncertainty (E6'), E6f fatigue form, E6s scans.",
+  "claims": [
+    {
+      "id": "B1", "layer": "benchmark", "main": true, "direction": "favourable", "status": "robust",
+      "claim_en": "Channel valuation contributes on the known-utility benchmarks: against NoC, AdaIS had lower regret on BNH, TNK, ZDT2 and ZDT3 and lower burden on all five problems; ZDT1 regret showed no detectable difference.",
+      "claim_zh": "通道估值在已知效用基准上有作用：对 NoC，AdaIS 在 BNH、TNK、ZDT2、ZDT3 上后悔值更低，五个问题上负担都更低；ZDT1 的后悔值无可检测差异。",
+      "original": "基准消融：自适应时机和通道估值都贡献终端性能（摘要、5.1）——通道估值部分", "review3": "#4 改写", "change": "改写",
+      "note": "通道估值部分保留并按问题写出；时机部分见 B2。", "comments": ["R1-9", "R2-9", "R3-5"],
+      "evidence": [
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT2", "ZDT3"], "b": "NoC", "m": "regret_rec", "x": "+"},
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": "NoC", "m": "C_cog", "x": "+"},
+        {"s": "B", "scope": "ZDT1", "b": "NoC", "m": "regret_rec", "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "B2", "vs_review3": "#4 第三节写时机在 ZDT2、ZDT3 上 HV-AUC 更好；按种子聚类后不显著，时机在基准上没有任何显著收益。", "layer": "benchmark", "main": true, "direction": "adverse", "status": "adverse",
+      "claim_en": "On the benchmarks, adaptive timing gave no detectable gain in terminal quality: against NoT, terminal HV and HV-AUC showed no detectable difference on any problem, while AdaIS used more burden and more interactions on all five.",
+      "claim_zh": "基准上自适应时机没有带来可检测的终端质量提升：对 NoT，终端 HV 和 HV-AUC 在每个问题上都无可检测差异，而 AdaIS 在全部五个问题上负担和交互次数都更高。",
+      "original": "基准消融：自适应时机贡献终端性能（摘要、5.1）——时机部分", "review3": "#4 改写", "change": "改写（不利）",
+      "note": "第三节写的是“HV-AUC 在 ZDT2、ZDT3 上更好”；按种子聚类后这两项也不显著，时机在基准上没有任何显著收益（第八节）。", "comments": ["R1-9", "R2-9", "R3-5"],
+      "evidence": [
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": "NoT", "m": ["C_cog", "N_int"], "x": "-"},
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": "NoT", "m": ["terminal_hv", "hv_auc"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "B3", "layer": "benchmark", "direction": "favourable", "status": "robust",
+      "claim_en": "Dense cadences cost burden without lowering regret: Fixed-2, Fixed-4 and Random-C used more burden than AdaIS on all five benchmarks and achieved lower regret on none; the exception in quality is Fixed-2 on TNK, with higher terminal HV and HV-AUC.",
+      "claim_zh": "密集节奏多花负担而不降低后悔值：Fixed-2、Fixed-4、Random-C 在五个基准上负担都高于 AdaIS，后悔值在任何问题上都不更低；质量上的例外是 Fixed-2 在 TNK 上终端 HV 和 HV-AUC 更高。",
+      "original": "密集节奏（Fixed-2/4、Random-C）多花负担而不提升质量（5.1）", "review3": "#9 保留", "change": "保留",
+      "note": "按种子聚类后，后悔值优势只剩 TNK 等少数问题，但“不更差”仍成立；TNK 上 Fixed-2 的 HV 更高照实写出。", "comments": ["R1-9", "R2-9", "R3-5"],
+      "evidence": [
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": ["Fixed-2", "Fixed-4", "Random-C"], "m": "C_cog", "x": "+"},
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": ["Fixed-2", "Fixed-4", "Random-C"], "m": "regret_rec", "x": ">=0", "role": "context"},
+        {"s": "B", "scope": "TNK", "b": "Fixed-2", "m": ["terminal_hv", "hv_auc"], "x": "-", "role": "context"}
+      ]
+    },
+    {
+      "id": "B4", "vs_review3": "#8 第三节为对 Fixed-8 后悔值 4/5 更好、终端 HV 在 ZDT1、ZDT2 上更差；按种子聚类后后悔值 3/5（BNH、TNK、ZDT1），终端 HV 不再更差。", "layer": "benchmark", "direction": "favourable", "status": "robust",
+      "claim_en": "Against Fixed-8 on the benchmarks, AdaIS had lower regret on BNH, TNK and ZDT1 and lower burden on every problem except TNK; ZDT2 and ZDT3 regret showed no detectable difference.",
+      "claim_zh": "基准上对 Fixed-8：AdaIS 在 BNH、TNK、ZDT1 上后悔值更低，除 TNK 外负担都更低；ZDT2、ZDT3 的后悔值无可检测差异。",
+      "original": "基准：AdaIS 的终端 HV 比率最高（0.981），ZDT1–3 上终端优势在中点后形成（5.1、图 3、4）", "review3": "#8 改写", "change": "改写",
+      "note": "第三节为“对 Fixed-8 在 4/5 个问题上更好”；按种子聚类后为 BNH、TNK、ZDT1 三个（第八节）。HV 排名一句删除（见 W6）。", "comments": ["R1-9", "R2-9", "R3-5"],
+      "evidence": [
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1"], "b": "Fixed-8", "m": "regret_rec", "x": "+"},
+        {"s": "B", "scope": ["BNH", "ZDT1", "ZDT2", "ZDT3"], "b": "Fixed-8", "m": "C_cog", "x": "+"},
+        {"s": "B", "scope": ["ZDT2", "ZDT3"], "b": "Fixed-8", "m": "regret_rec", "x": "0", "role": "context"},
+        {"s": "B", "scope": "TNK", "b": "Fixed-8", "m": "C_cog", "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "B5", "vs_review3": "#8 第三节为后悔值对 Fixed-16 在 4/5 个问题上更好；按种子聚类后 0/5，终端 HV 只在 ZDT1 上更差。", "layer": "benchmark", "direction": "adverse", "status": "adverse",
+      "claim_en": "Fixed-16, the sparsest cadence, used less burden than AdaIS on all five benchmarks and reached higher terminal HV on ZDT1; no problem showed a detectable regret difference.",
+      "claim_zh": "最稀疏的 Fixed-16 在五个基准上负担都低于 AdaIS，ZDT1 上终端 HV 更高；后悔值在任何问题上都无可检测差异。",
+      "original": "基准：AdaIS 的终端 HV 比率最高（5.1、图 3、4）", "review3": "#8 改写", "change": "改写（不利）",
+      "note": "第三节为“后悔值对 Fixed-16 在 4/5 个问题上更好”；按种子聚类后为 0/5（第八节）。", "comments": ["R1-9", "R2-9", "R3-5"],
+      "evidence": [
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": "Fixed-16", "m": "C_cog", "x": "-"},
+        {"s": "B", "scope": "ZDT1", "b": "Fixed-16", "m": "terminal_hv", "x": "-"},
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": "Fixed-16", "m": "regret_rec", "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "B6", "layer": "benchmark", "direction": "favourable", "status": "robust",
+      "claim_en": "On the clean benchmarks the quality monitor mainly saves burden: against NoQ, burden was lower on BNH and TNK, and regret showed no detectable difference on any problem.",
+      "claim_zh": "干净基准上质量监测器主要节省负担：对 NoQ，BNH、TNK 上负担更低，后悔值在任何问题上都无可检测差异。",
+      "original": "干净基准中 NoQ 与 AdaIS 接近，监测器主要降负担（5.1）", "review3": "#10 改写", "change": "改写",
+      "note": "负担只在 BNH、TNK 上更低；不利的一面见 B7。", "comments": ["R1-9", "R2-2"],
+      "evidence": [
+        {"s": "B", "scope": ["BNH", "TNK"], "b": "NoQ", "m": "C_cog", "x": "+"},
+        {"s": "B", "scope": ["ZDT1", "ZDT2", "ZDT3"], "b": "NoQ", "m": "C_cog", "x": "0", "role": "context"},
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": "NoQ", "m": "regret_rec", "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "B7", "layer": "benchmark", "direction": "adverse", "status": "adverse",
+      "claim_en": "Against NoQ, AdaIS asked more often on ZDT1, ZDT2 and ZDT3 and reached lower terminal HV on ZDT3.",
+      "claim_zh": "对 NoQ，AdaIS 在 ZDT1、ZDT2、ZDT3 上问得更多，ZDT3 上终端 HV 更低。",
+      "original": "基准：TNK 是主要例外（5.1、图 3、4）；干净基准中 NoQ 与 AdaIS 接近（5.1）", "review3": "#8、#10 改写", "change": "改写（不利）",
+      "note": "例外由 TNK 改为 ZDT3（对 NoQ）；ZDT3 的后悔值差异按种子聚类后不显著，只写终端 HV。", "comments": ["R1-9", "R2-2"],
+      "evidence": [
+        {"s": "B", "scope": ["ZDT1", "ZDT2", "ZDT3"], "b": "NoQ", "m": "N_int", "x": "-"},
+        {"s": "B", "scope": "ZDT3", "b": "NoQ", "m": "terminal_hv", "x": "-"}
+      ]
+    },
+    {
+      "id": "A1", "vs_review3": "#7 第三节列了三条支撑（固定节奏后悔值、对 VoI-MC 负担、对 Random-T 的 HV-AUC）；按种子聚类后只有前两条稳健，摘要末句只写 A1、A2。", "layer": "aero", "main": true, "direction": "favourable", "status": "robust",
+      "claim_en": "On held-out SAV-AERO blocks, the recommended design had lower ground-truth regret than under all four fixed-cadence baselines.",
+      "claim_zh": "在 SAV-AERO 留出区组上，AdaIS 推荐设计的真值后悔值低于全部四种固定节奏基线。",
+      "original": "协调时机、通道和证据权重能改善质量–成本平衡（摘要末句、5.3、结论）", "review3": "#7 改写", "change": "改写",
+      "note": "摘要末句只保留聚类口径下稳健的两条：本条与 A2。", "comments": ["AE", "R2-1"],
+      "evidence": [
+        {"s": "E1", "b": ["Fixed-2", "Fixed-4", "Fixed-8", "Fixed-16"], "m": "regret_rec", "x": "+"}
+      ]
+    },
+    {
+      "id": "A2", "layer": "aero", "main": true, "direction": "favourable", "status": "robust",
+      "claim_en": "Against VoI-Timing-MC with its original posterior, AdaIS used less burden and fewer interactions, with no detectable difference in regret, terminal HV, HV-AUC or response latency.",
+      "claim_zh": "对原后验的 VoI-Timing-MC，AdaIS 负担更低、交互更少；后悔值、终端 HV、HV-AUC 和响应时延都无可检测差异。",
+      "original": "对 VoI-MC：交互少 9.7%、负担低 10.7%、时延低 3.0%，三项质量指标无可检测差异（摘要、5.2.3、结论）", "review3": "#5 改写", "change": "改写",
+      "note": "数字更新；时延一项删除（见 W3）；限定为原 VoI-MC 与组合宿主（见 A9、H3）。", "comments": ["R4-7", "AE"],
+      "evidence": [
+        {"s": "E1", "b": "VoI-MC", "m": ["C_cog", "N_int"], "x": "+"},
+        {"s": "E1", "b": "VoI-MC", "m": ["regret_rec", "terminal_hv", "hv_auc", "T_resp"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "A3", "vs_review3": "#3、#18 第三节保留“HV-AUC 显著更高（收敛更快）”；按种子聚类后 HV-AUC 也只剩方向（5/10），对 Random-T 没有一项显著。", "layer": "aero", "main": true, "direction": "favourable", "status": "directional",
+      "claim_en": "Against count-matched Random-T, no comparison was conclusive: the HV-AUC point estimate favoured AdaIS (directional), and terminal HV, regret and burden showed no detectable difference.",
+      "claim_zh": "对次数匹配的 Random-T，没有一项比较达到显著：HV-AUC 的点估计偏向 AdaIS（方向性），终端 HV、后悔值和负担都无可检测差异。",
+      "original": "次数匹配下终端 HV 比 Random-T 高 37.3%（22.7–54.8%），HV-AUC 高 17.8%（摘要、5.2.3、结论）；5.3：对 Random-T 终端和全程质量都更好", "review3": "#3、#18 改写", "change": "改写",
+      "note": "第三节判定“只保留 HV-AUC（收敛更快）”；按种子聚类后 HV-AUC 也降为方向性结果（第八节），对 Random-T 没有一项显著。", "comments": ["AE", "R1-3"],
+      "evidence": [
+        {"s": "E1", "b": "Random-T", "m": "hv_auc", "x": "+"},
+        {"s": "E1", "b": "Random-T", "m": ["terminal_hv", "regret_rec", "C_cog"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "A4", "layer": "aero", "direction": "favourable", "status": "robust",
+      "claim_en": "Against Fixed-2, Fixed-4 and Fixed-8 and against Random-C, AdaIS used less burden on SAV-AERO; Fixed-16, the sparsest cadence, used less.",
+      "claim_zh": "在 SAV-AERO 上，AdaIS 的负担低于 Fixed-2、Fixed-4、Fixed-8 和 Random-C；最稀疏的 Fixed-16 负担更低。",
+      "original": "表 6、图 13、14、18：八方法格局，跨证据层只作描述", "review3": "#16 改写", "change": "改写",
+      "note": "八种方法在同一留出矩阵中，改为配对推断。", "comments": ["R3-10"],
+      "evidence": [
+        {"s": "E1", "b": ["Fixed-2", "Fixed-4", "Fixed-8", "Random-C"], "m": "C_cog", "x": "+"},
+        {"s": "E1", "b": "Fixed-16", "m": "C_cog", "x": "-", "role": "context"}
+      ]
+    },
+    {
+      "id": "A5", "layer": "aero", "direction": "favourable", "status": "robust",
+      "claim_en": "Against Random-C on SAV-AERO, AdaIS asked fewer questions and recovered the weights more accurately, with no detectable difference in regret or terminal HV.",
+      "claim_zh": "在 SAV-AERO 上对 Random-C，AdaIS 交互更少、权重恢复更准，后悔值和终端 HV 无可检测差异。",
+      "original": "表 6：八方法格局（跨证据层只作描述）", "review3": "#16 改写", "change": "改写",
+      "note": "P-balanced 下真值权重等于初始权重，权重恢复对多数比较对象没有信息量；Random-C 是唯一例外（随机通道会把权重推离初值），照实列出。", "comments": ["R3-10"],
+      "evidence": [
+        {"s": "E1", "b": "Random-C", "m": ["N_int", "w_err_l1"], "x": "+"},
+        {"s": "E1", "b": "Random-C", "m": ["regret_rec", "terminal_hv"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "A6", "vs_review3": "#11 第三节整条判为改写（因 NoQ 部分）；通道估值部分单列为保留，但 NoC 的终端 HV 差异按种子聚类后不显著。", "layer": "aero", "main": true, "direction": "favourable", "status": "robust",
+      "claim_en": "In the nominal SAV-AERO ablation, channel valuation is the component with a robust quality effect: removing it (NoC) increased regret and burden; the terminal-HV loss is directional.",
+      "claim_zh": "SAV-AERO 名义消融中，通道估值是唯一有稳健质量效应的部件：去掉它（NoC）后后悔值和负担都更高；终端 HV 的下降只是方向性的。",
+      "original": "气动名义消融：通道估值是主导部件（5.2.2、图 9）", "review3": "#11 改写", "change": "保留",
+      "note": "按种子聚类后 NoC 的终端 HV 差异不显著，后悔值和负担仍显著（第八节）。", "comments": ["R1-11", "R3-8"],
+      "evidence": [
+        {"s": "E8", "b": "NoC", "m": ["regret_rec", "C_cog"], "x": "+"},
+        {"s": "E8", "b": "NoC", "m": "terminal_hv", "x": "+", "role": "context"}
+      ]
+    },
+    {
+      "id": "A7", "vs_review3": "#11 第三节写 NoT 的 HV-AUC 好 0.093；按种子聚类后不显著，只剩 NoT 负担更低。", "layer": "aero", "direction": "adverse", "status": "adverse",
+      "claim_en": "Removing adaptive timing (NoT) lowered burden and interactions on SAV-AERO, with no detectable difference in regret, terminal HV or HV-AUC.",
+      "claim_zh": "SAV-AERO 上去掉自适应时机（NoT）后负担和交互都更低，后悔值、终端 HV、HV-AUC 无可检测差异。",
+      "original": "气动名义消融：去掉时机的效应不显著（5.2.2、图 9）", "review3": "#11 改写", "change": "改写（不利）",
+      "note": "原句只说“不显著”；照实补上 NoT 负担更低。NoT 的 HV-AUC 优势按种子聚类后不显著（第八节）。", "comments": ["R1-11", "R3-8"],
+      "evidence": [
+        {"s": "E8", "b": "NoT", "m": ["C_cog", "N_int"], "x": "-"},
+        {"s": "E8", "b": "NoT", "m": ["regret_rec", "terminal_hv", "hv_auc"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "A8", "layer": "aero", "direction": "favourable", "status": "robust",
+      "claim_en": "Without corruption, the quality monitor lowered burden and response latency relative to NoQ on SAV-AERO.",
+      "claim_zh": "无污染时，SAV-AERO 上质量监测器相对 NoQ 降低了负担和响应时延。",
+      "original": "5.3、结论：监测器对 NoQ 没有终端 HV 增益，但降低暴露、交互和负担", "review3": "#19 改写", "change": "改写",
+      "note": "名义条件下交互次数无差别，只有负担与时延更低；质量的另一面见 A9。", "comments": ["R2-2", "R1-11"],
+      "evidence": [
+        {"s": "E8", "b": "NoQ", "m": ["C_cog", "T_resp"], "x": "+"}
+      ]
+    },
+    {
+      "id": "A9", "vs_review3": "#11 第三节判为显著的不利结果（NoQ 质量更好）；按种子聚类后降为方向性。", "layer": "aero", "main": true, "direction": "adverse", "status": "directional",
+      "claim_en": "Without corruption, the monitor's burden saving came with a directional quality cost: NoQ had higher terminal HV and HV-AUC and lower regret, but none of these differences was conclusive.",
+      "claim_zh": "无污染时，监测器节省负担伴随方向性的质量代价：NoQ 终端 HV 和 HV-AUC 更高、后悔值更低，但都不显著。",
+      "original": "气动名义消融：AdaIS 与 NoQ 名义 HV 无差别（5.2.2、图 9）", "review3": "#11 改写（不利）", "change": "改写（不利，方向性）",
+      "note": "第三节判为显著的不利结果；按种子聚类后降为方向性结果（5/10 个种子），但仍不能写成“无差别”（R1-11）。", "comments": ["R1-11", "R2-2"],
+      "evidence": [
+        {"s": "E8", "b": "NoQ", "m": ["terminal_hv", "hv_auc", "regret_rec"], "x": "-"}
+      ]
+    },
+    {
+      "id": "A10", "layer": "aero", "main": true, "direction": "none", "status": "null",
+      "claim_en": "Against a VoI-Timing variant with an all-channel posterior, there is no detectable difference in regret, terminal HV, HV-AUC or burden; the burden advantage of A2 holds only against the original VoI-Timing-MC.",
+      "claim_zh": "对全通道后验的 VoI-Timing 变体，后悔值、终端 HV、HV-AUC 和负担都无可检测差异；A2 中的负担优势只对原 VoI-Timing-MC 成立。",
+      "original": "对 VoI-MC：负担低 10.7%（摘要、5.2.3、结论）", "review3": "#5 改写", "change": "改写",
+      "note": "E9a，新增限定条件。", "comments": ["R4-7"],
+      "evidence": [
+        {"s": "E9a", "b": "VoI-AllCh", "m": ["regret_rec", "terminal_hv", "hv_auc", "C_cog"], "x": "0"}
+      ]
+    },
+    {
+      "id": "A11", "layer": "aero", "direction": "none", "status": "descriptive",
+      "claim_en": "Query timing on SAV-AERO (descriptive): AdaIS asks most in the first third of the run and least in the last; count-matched Random-T spreads its queries; VoI-Timing-MC asks nothing in the last third in most runs; AdaIS rarely selected the NL clarification channel.",
+      "claim_zh": "SAV-AERO 上的提问时机（描述性）：AdaIS 前三分之一问得最多、最后三分之一最少；次数匹配的 Random-T 分布较均匀；VoI-Timing-MC 多数运行在最后三分之一不再提问；AdaIS 很少选择文字澄清通道。",
+      "original": "图 15：AdaIS 前多后少（5.93/3.26/1.34）；VoI-MC 全部 90 个运行在最后三分之一前耗尽预算；NL 从未被选中；成对比较“只是一小条”", "review3": "#13 改写", "change": "改写",
+      "note": "删去“从未选中”“全部 90 个”“一小条”（见 W4、W5）。", "comments": ["R1-6", "R2-7", "R2-8", "R4-7"],
+      "evidence": [
+        {"src": "process", "where": {"matrix": "p3_core", "method": "AdaIS"}, "field": "third1", "key": "ada_t1", "label": "AdaIS queries, first third"},
+        {"src": "process", "where": {"matrix": "p3_core", "method": "AdaIS"}, "field": "third2", "key": "ada_t2", "label": "AdaIS queries, second third"},
+        {"src": "process", "where": {"matrix": "p3_core", "method": "AdaIS"}, "field": "third3", "key": "ada_t3", "label": "AdaIS queries, last third"},
+        {"src": "process", "where": {"matrix": "p3_core_random_t", "method": "Random-T"}, "field": "third1", "key": "rt_t1", "label": "Random-T queries, first third"},
+        {"src": "process", "where": {"matrix": "p3_core_random_t", "method": "Random-T"}, "field": "third3", "key": "rt_t3", "label": "Random-T queries, last third"},
+        {"src": "process", "where": {"matrix": "p3_core", "method": "VoI-MC"}, "field": "runs_no_last_third", "key": "voi_nolast", "label": "VoI-MC runs with no query in the last third"},
+        {"src": "process", "where": {"matrix": "p3_core", "method": "VoI-MC"}, "field": "n_runs", "key": "voi_n", "label": "VoI-MC runs"},
+        {"src": "process", "where": {"matrix": "p3_core", "method": "AdaIS"}, "field": "runs_with_nl", "key": "ada_nl", "label": "AdaIS runs selecting NL"},
+        {"src": "process", "where": {"matrix": "p3_core", "method": "AdaIS"}, "field": "n_runs", "key": "ada_n", "label": "AdaIS runs"}
+      ],
+      "checks": ["ada_t1 > ada_t2", "ada_t2 > ada_t3", "rt_t3 > rt_t1", "voi_nolast / voi_n > 0.5", "ada_nl / ada_n < 0.05"]
+    },
+    {
+      "id": "E1", "layer": "edge", "direction": "favourable", "status": "robust",
+      "claim_en": "Under the drag-priority persona (P-edge), weight recovery was more accurate than under Fixed-2, Fixed-4, Fixed-8, Fixed-16 and Random-C; against VoI-Timing-MC the advantage is directional.",
+      "claim_zh": "阻力优先画像（P-edge）下，AdaIS 的权重恢复比 Fixed-2、Fixed-4、Fixed-8、Fixed-16、Random-C 更准；对 VoI-Timing-MC 的优势只是方向性的。",
+      "original": "—（修订新增；10-22 G2 叙事曾写“对所有比较对象显著更低（含 VoI-MC）”）", "review3": "—", "change": "新增",
+      "note": "按种子聚类后对 VoI-MC 不再显著（第八节）。", "comments": ["R1-9", "R3-4"],
+      "evidence": [
+        {"s": "E2", "b": ["Fixed-2", "Fixed-4", "Fixed-8", "Fixed-16", "Random-C"], "m": "w_err_l1", "x": "+"},
+        {"s": "E2", "b": "VoI-MC", "m": "w_err_l1", "x": "+", "role": "context"}
+      ]
+    },
+    {
+      "id": "E2", "layer": "edge", "main": true, "direction": "adverse", "status": "adverse",
+      "claim_en": "Under the drag-priority persona, the recommended design's regret was worse than under Fixed-4, Fixed-16 and count-matched Random-T, and weight recovery was worse than under Random-T; the regret deficit against Fixed-2 is directional.",
+      "claim_zh": "阻力优先画像下，AdaIS 推荐设计的后悔值不如 Fixed-4、Fixed-16 和次数匹配的 Random-T，权重恢复也不如 Random-T；对 Fixed-2 的后悔值劣势只是方向性的。",
+      "original": "—（修订新增的边界条件）", "review3": "—", "change": "新增（不利）",
+      "note": "10-22 G2 叙事写的是 Fixed / Fixed-2 / Fixed-16；按种子聚类后为 Fixed-4、Fixed-16、Random-T（第八节）。", "comments": ["R1-9", "R3-4"],
+      "evidence": [
+        {"s": "E2", "b": ["Fixed-4", "Fixed-16", "Random-T"], "m": "regret_rec", "x": "-"},
+        {"s": "E2", "b": "Random-T", "m": "w_err_l1", "x": "-"},
+        {"s": "E2", "b": "Fixed-2", "m": "regret_rec", "x": "-", "role": "context"}
+      ]
+    },
+    {
+      "id": "E3", "layer": "edge", "direction": "favourable", "status": "robust",
+      "claim_en": "Under the drag-priority persona, burden stayed lower than under Fixed-2, Fixed-4, Fixed-8, Random-C and VoI-Timing-MC; it showed no detectable difference from Random-T and was higher than under Fixed-16.",
+      "claim_zh": "阻力优先画像下，AdaIS 的负担仍低于 Fixed-2、Fixed-4、Fixed-8、Random-C 和 VoI-Timing-MC；与 Random-T 无可检测差异，高于 Fixed-16。",
+      "original": "—（修订新增）", "review3": "—", "change": "新增", "note": "", "comments": ["R1-9"],
+      "evidence": [
+        {"s": "E2", "b": ["Fixed-2", "Fixed-4", "Fixed-8", "Random-C", "VoI-MC"], "m": "C_cog", "x": "+"},
+        {"s": "E2", "b": "Random-T", "m": "C_cog", "x": "0", "role": "context"},
+        {"s": "E2", "b": "Fixed-16", "m": "C_cog", "x": "-", "role": "context"}
+      ]
+    },
+    {
+      "id": "K1", "layer": "corruption", "main": true, "direction": "favourable", "status": "robust",
+      "claim_en": "Under common corruption, the quality monitor acted as a risk and burden control: against NoQ, weight-recovery error, interactions and burden were all lower, with no detectable difference in regret or terminal HV.",
+      "claim_zh": "共同污染下，质量监测器起到风险与负担控制的作用：对 NoQ，权重恢复误差、交互次数和负担都更低，后悔值和终端 HV 无可检测差异。",
+      "original": "共同污染下监测器把标记事件率从 0.380 降到 0.243，避免 3.01 次交互和 0.543 负担；终端 HV 无差异（摘要、5.2.2、结论）", "review3": "#6、#19 改写", "change": "改写",
+      "note": "终点换成不依赖监测器的权重恢复误差（标记事件率是循环终点，见 W11）。", "comments": ["R2-2", "R4-5", "R4-6", "R3-8"],
+      "evidence": [
+        {"s": "E7", "b": "NoQ", "m": ["w_err_l1", "N_int", "C_cog"], "x": "+"},
+        {"s": "E7", "b": "NoQ", "m": ["regret_rec", "terminal_hv"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "K2", "layer": "corruption", "main": true, "direction": "favourable", "status": "robust",
+      "claim_en": "The monitor's update weight separates corrupted from clean answers (β gap against the simulator's corruption labels); NoQ and NoQ-post, which apply no down-weighting, show none.",
+      "claim_zh": "监测器的更新权重能区分被污染与未被污染的回答（以仿真器的污染标签计算的 β 区分度）；不降权的 NoQ 和 NoQ-post 没有区分。",
+      "original": "共同污染下监测器把标记事件率从 0.380 降到 0.243（摘要、5.2.2、结论）", "review3": "#6 改写", "change": "改写",
+      "note": "第三节 CI 为单元格口径 [0.094, 0.163]，按种子聚类后变宽，仍显著（7/9 个种子）。", "comments": ["R4-5", "R4-6", "R2-2"],
+      "evidence": [
+        {"src": "beta_gap", "where": {"method": "AdaIS"}, "x": "+"},
+        {"src": "beta_gap", "where": {"method": ["NoQ", "NoQ-post"]}, "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "K3", "vs_review3": "#20 第三节写 NoQ-post 后悔值均值好 0.161 且显著；按种子聚类后不显著（4/10）。", "layer": "corruption", "direction": "favourable", "status": "robust",
+      "claim_en": "Both monitor paths matter for weight recovery under corruption: removing the pre-query restriction (NoQ-pre) or the post-response down-weighting (NoQ-post) each raised weight-recovery error; NoQ-pre also raised interactions and burden, and NoQ-post absorbed more corrupted evidence. NoQ-post's lower mean regret is directional.",
+      "claim_zh": "共同污染下，监测器的两条路径都影响权重恢复：去掉查询前限制（NoQ-pre）或响应后降权（NoQ-post）都使权重恢复误差变大；NoQ-pre 还增加了交互和负担，NoQ-post 吸收了更多被污染证据。NoQ-post 后悔值均值更低只是方向性的。",
+      "original": "贡献 2：双路径——查询前限制 + 响应后衰减", "review3": "#20 改写", "change": "改写",
+      "note": "第三节写 NoQ-post 后悔值均值好 0.161 且显著；按种子聚类后不显著（4/10，第八节）。", "comments": ["R4-5", "R4-6"],
+      "evidence": [
+        {"s": "E7", "b": "NoQ-pre", "m": ["w_err_l1", "N_int", "C_cog"], "x": "+"},
+        {"s": "E7", "b": "NoQ-post", "m": ["w_err_l1", "absorbed_corrupted"], "x": "+"},
+        {"s": "E7", "b": "NoQ-post", "m": "regret_rec", "x": "-", "role": "context"}
+      ]
+    },
+    {
+      "id": "K4", "vs_review3": "#12 与第五节第 2 项：第三节和第五节判为显著的不利结果；按种子聚类后降为方向性。", "layer": "corruption", "direction": "adverse", "status": "directional",
+      "claim_en": "Under corruption, AdaIS's mean regret is worse than under Fixed-8, NoC and NoQ-post, but the differences are directional; they come from a heavy upper tail in two seeds, in which the last reference-point answer was corrupted and was not down-weighted by the monitor.",
+      "claim_zh": "共同污染下，AdaIS 的后悔值均值不如 Fixed-8、NoC 和 NoQ-post，但这些差异只是方向性的；它们来自两个种子上的上尾，这些运行最后一个参考点回答被污染，监测器没有降权。",
+      "original": "—（修订新增的不利结果，结果审阅第五节第 2 项）", "review3": "—", "change": "新增（不利，方向性）",
+      "note": "第五节判为显著的不利结果；按种子聚类后降为方向性结果（第八节）。重尾机制照写，不能据此说监测器改善了解质量。", "comments": ["R2-2", "R3-8"],
+      "evidence": [
+        {"s": "E7", "b": ["Fixed-8", "NoC", "NoQ-post"], "m": "regret_rec", "x": "-"},
+        {"src": "tail", "where": {"method": "AdaIS"}, "field": "median", "label": "AdaIS median regret"},
+        {"src": "tail", "where": {"method": "Fixed-8"}, "field": "median", "label": "Fixed-8 median regret"},
+        {"src": "tail", "where": {"method": "NoC"}, "field": "median", "label": "NoC median regret"},
+        {"src": "tail", "where": {"method": "AdaIS"}, "field": "n_above_2", "label": "AdaIS runs with regret > 2"},
+        {"src": "tail_profile", "where": {"method": "AdaIS", "tail": true}, "field": "seeds", "agg": "n_items", "key": "tail_seeds", "label": "seeds holding the AdaIS tail"},
+        {"src": "tail_profile", "where": {"method": "AdaIS", "tail": true}, "field": "r0_last_corrupted", "key": "tail_r0last", "label": "tail runs whose last r0 answer was corrupted (share)"},
+        {"src": "tail_profile", "where": {"method": "AdaIS", "tail": true}, "field": "beta_threshold", "key": "tail_beta", "label": "mean β of those threshold answers"}
+      ],
+      "checks": ["tail_seeds == 2", "tail_r0last == 1", "tail_beta > 0.9"]
+    },
+    {
+      "id": "K5", "layer": "corruption", "direction": "favourable", "status": "robust",
+      "claim_en": "Under corruption, against NoC, terminal HV was higher and burden lower.",
+      "claim_zh": "共同污染下，对 NoC：终端 HV 更高、负担更低。",
+      "original": "污染下 NoT、NoC 没有同样的保护模式；NoC 的 HV 略高、负担略低（5.2.2）", "review3": "#12 改写", "change": "改写",
+      "note": "原稿说 NoC HV 略高、负担略低，P3 下相反；NoC 后悔值均值的差异见 K4。", "comments": ["R3-8"],
+      "evidence": [
+        {"s": "E7", "b": "NoC", "m": ["terminal_hv", "C_cog"], "x": "+"}
+      ]
+    },
+    {
+      "id": "K6", "layer": "corruption", "direction": "favourable", "status": "robust",
+      "claim_en": "Under corruption, against NoT, weight-recovery error was lower, with no detectable difference in regret, terminal HV or burden.",
+      "claim_zh": "共同污染下，对 NoT：权重恢复误差更低，后悔值、终端 HV 和负担无可检测差异。",
+      "original": "污染下 NoT、NoC 没有同样的保护模式（5.2.2）", "review3": "#12 改写", "change": "改写", "note": "", "comments": ["R3-8"],
+      "evidence": [
+        {"s": "E7", "b": "NoT", "m": "w_err_l1", "x": "+"},
+        {"s": "E7", "b": "NoT", "m": ["regret_rec", "terminal_hv", "C_cog"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "K7", "layer": "corruption", "direction": "favourable", "status": "robust",
+      "claim_en": "Under corruption, against Fixed-8 and Random-C, burden was lower and less corrupted evidence was absorbed, and weight recovery was more accurate than under Random-C; the terminal-HV advantage over Fixed-8 is directional.",
+      "claim_zh": "共同污染下，对 Fixed-8 和 Random-C：负担更低、吸收的被污染证据更少，权重恢复比 Random-C 更准；对 Fixed-8 的终端 HV 优势只是方向性的。",
+      "original": "—（修订新增）", "review3": "—", "change": "新增",
+      "note": "按种子聚类后对 Fixed-8 的终端 HV 不显著（第八节）。", "comments": ["R4-5"],
+      "evidence": [
+        {"s": "E7", "b": ["Fixed-8", "Random-C"], "m": ["C_cog", "absorbed_corrupted"], "x": "+"},
+        {"s": "E7", "b": "Random-C", "m": "w_err_l1", "x": "+"},
+        {"s": "E7", "b": "Fixed-8", "m": "terminal_hv", "x": "+", "role": "context"}
+      ]
+    },
+    {
+      "id": "K8", "layer": "corruption", "direction": "favourable", "status": "robust",
+      "claim_en": "At the highest fatigue level of the corruption matrix, the monitor's advantages over NoQ held: lower weight-recovery error, interactions and burden, with no detectable difference in regret or terminal HV.",
+      "claim_zh": "共同污染矩阵中疲劳最高的一档，监测器对 NoQ 的优势仍然成立：权重恢复误差、交互和负担更低，后悔值和终端 HV 无可检测差异。",
+      "original": "图 17：疲劳 1.3 时监测器降低暴露和负担，终端 HV 无优势（5.2.3）", "review3": "#15 保留", "change": "保留",
+      "note": "终点换成真值指标。", "comments": ["R3-4", "R2-2"],
+      "evidence": [
+        {"src": "fatigue_slice", "where": {"fatigue": 1.3, "b": "NoQ", "metric": ["w_err_l1", "N_int", "C_cog"]}, "x": "+"},
+        {"src": "fatigue_slice", "where": {"fatigue": 1.3, "b": "NoQ", "metric": ["regret_rec", "terminal_hv"]}, "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "K9", "layer": "corruption", "direction": "none", "status": "descriptive",
+      "claim_en": "Part of the monitor's interaction savings under corruption comes from pausing (descriptive): AdaIS paused elicitation in a share of the corrupted runs and left the remaining budget unspent, whereas NoQ never paused.",
+      "claim_zh": "共同污染下监测器节省的交互有一部分来自暂停（描述性）：AdaIS 在一部分污染运行中暂停提问，剩余预算不再使用；NoQ 从不暂停。",
+      "original": "共同污染下监测器避免 3.01 次交互和 0.543 负担（摘要、5.2.2）", "review3": "#6 改写", "change": "改写",
+      "note": "第三节已指出节省有相当部分来自暂停。", "comments": ["R2-7", "R4-6"],
+      "evidence": [
+        {"src": "process", "where": {"matrix": "p3_corruption", "method": "AdaIS"}, "field": "paused", "key": "ada_paused", "label": "AdaIS share of runs that paused"},
+        {"src": "process", "where": {"matrix": "p3_corruption", "method": "AdaIS"}, "field": "budget_left_at_pause", "label": "AdaIS budget left at pause"},
+        {"src": "process", "where": {"matrix": "p3_corruption", "method": "NoQ"}, "field": "paused", "key": "noq_paused", "label": "NoQ share of runs that paused"}
+      ],
+      "checks": ["ada_paused > 0", "noq_paused == 0"]
+    },
+    {
+      "id": "H1", "layer": "host", "direction": "favourable", "status": "robust",
+      "claim_en": "On a preference-blind NSGA-II host, where populations and HV are identical for all methods, AdaIS still used less burden than NoQ, Fixed-8 and Random-C pooled over the five benchmarks, although it asked more often than NoQ and Fixed-8; regret showed no detectable difference.",
+      "claim_zh": "在偏好盲的 NSGA-II 宿主上（各方法种群与 HV 完全相同），五个基准合并后 AdaIS 的负担仍低于 NoQ、Fixed-8 和 Random-C，虽然比 NoQ、Fixed-8 问得更多；后悔值无可检测差异。",
+      "original": "optimizer-agnostic / optimizer-decoupled（摘要、贡献 1、结论）", "review3": "#1 改写", "change": "改写",
+      "note": "解耦只是架构层面的，实证收益限于组合宿主（见 H3）。", "comments": ["R1-3", "R3-9", "R2-4"],
+      "evidence": [
+        {"s": "E5", "scope": "nsga2/pooled", "b": ["NoQ", "Fixed-8", "Random-C"], "m": "C_cog", "x": "+"},
+        {"s": "E5", "scope": "nsga2/pooled", "b": ["NoQ", "Fixed-8", "Random-C"], "m": ["regret_rec", "terminal_hv"], "x": "0", "role": "context"},
+        {"s": "E5", "scope": "nsga2/pooled", "b": ["NoQ", "Fixed-8"], "m": "N_int", "x": "-", "role": "context"}
+      ],
+      "checks": ["abs(hv_noq_hi) + abs(hv_noq_lo) == 0"],
+      "keys": {"hv_noq": {"s": "E5", "scope": "nsga2/pooled", "b": "NoQ", "m": "terminal_hv"}}
+    },
+    {
+      "id": "H2", "layer": "host", "direction": "favourable", "status": "robust",
+      "claim_en": "On the preference-blind host with SAV-AERO, burden and interactions were lower than under VoI-Timing-MC, with no detectable regret difference.",
+      "claim_zh": "偏好盲宿主上的 SAV-AERO：负担和交互都低于 VoI-Timing-MC，后悔值无可检测差异。",
+      "original": "optimizer-agnostic（摘要、贡献 1、结论）", "review3": "#1 改写", "change": "改写", "note": "", "comments": ["R1-3", "R3-9"],
+      "evidence": [
+        {"s": "E5", "scope": "nsga2/SAV-AERO", "b": "VoI-MC", "m": ["C_cog", "N_int"], "x": "+"},
+        {"s": "E5", "scope": "nsga2/SAV-AERO", "b": "VoI-MC", "m": "regret_rec", "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "H3", "vs_review3": "#1 第三节写单生成器宿主下的劣势 CI 不含 0；按种子聚类后都不显著。", "layer": "host", "main": true, "direction": "adverse", "status": "directional",
+      "claim_en": "On a single-generator host that keeps the preference coupling, the default-host advantages were not observed: the regret and terminal-HV point estimates favoured VoI-Timing-MC and the terminal-HV point estimate favoured Random-T, all directional only; burden showed no detectable difference from VoI-Timing-MC, and AdaIS still asked fewer questions than VoI-Timing-MC.",
+      "claim_zh": "在保留偏好耦合的单生成器宿主上，默认宿主下的优势没有出现：后悔值和终端 HV 的点估计偏向 VoI-Timing-MC，终端 HV 的点估计偏向 Random-T，都只是方向性的；与 VoI-Timing-MC 的负担无可检测差异，AdaIS 仍比它问得少。",
+      "original": "optimizer-agnostic / optimizer-decoupled（摘要、贡献 1、结论）", "review3": "#1 改写", "change": "改写（不利，方向性）",
+      "note": "第三节写单生成器宿主下的劣势 CI 不含 0；按种子聚类后都不显著（3/10、4/10 个种子），写成“优势未观察到，劣势点估计也不显著”（第八节）。", "comments": ["R1-3", "R3-9", "R2-4"],
+      "evidence": [
+        {"s": "E5", "scope": "single_nsga2/SAV-AERO", "b": "VoI-MC", "m": ["regret_rec", "terminal_hv"], "x": "-"},
+        {"s": "E5", "scope": "single_nsga2/SAV-AERO", "b": "Random-T", "m": "terminal_hv", "x": "-"},
+        {"s": "E5", "scope": "single_nsga2/SAV-AERO", "b": "VoI-MC", "m": "C_cog", "x": "0", "role": "context"},
+        {"s": "E5", "scope": "single_nsga2/SAV-AERO", "b": "VoI-MC", "m": "N_int", "x": "+", "role": "context"}
+      ]
+    },
+    {
+      "id": "U1", "layer": "uncertainty", "main": true, "direction": "favourable", "status": "robust",
+      "claim_en": "Across Latin-hypercube samples of the assumed simulator parameters (E6'), AdaIS kept lower regret and burden and higher terminal HV and HV-AUC than Fixed-8.",
+      "claim_zh": "在设定的仿真参数的拉丁超立方抽样下（E6′），AdaIS 相对 Fixed-8 的后悔值、负担更低，终端 HV 和 HV-AUC 更高。",
+      "original": "—（修订新增）", "review3": "—", "change": "新增", "note": "", "comments": ["R3-4", "R1-13"],
+      "evidence": [
+        {"s": "E6u", "b": "Fixed-8", "m": ["regret_rec", "C_cog", "terminal_hv", "hv_auc"], "x": "+"}
+      ]
+    },
+    {
+      "id": "U2", "layer": "uncertainty", "direction": "favourable", "status": "robust",
+      "claim_en": "Across the same parameter samples, burden and interactions stayed lower than under VoI-Timing-MC, with no detectable difference in regret, terminal HV or HV-AUC.",
+      "claim_zh": "在同一组参数抽样下，AdaIS 的负担和交互仍低于 VoI-Timing-MC，后悔值、终端 HV、HV-AUC 无可检测差异。",
+      "original": "—（修订新增）", "review3": "—", "change": "新增", "note": "", "comments": ["R3-4", "R1-13"],
+      "evidence": [
+        {"s": "E6u", "b": "VoI-MC", "m": ["C_cog", "N_int"], "x": "+"},
+        {"s": "E6u", "b": "VoI-MC", "m": ["regret_rec", "terminal_hv", "hv_auc"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "U3", "layer": "uncertainty", "direction": "none", "status": "descriptive",
+      "claim_en": "Morris screening of the set constants on ZDT1 with the known-utility SDM (descriptive ranking): the answer-noise level ranks first for regret and terminal HV and the warm-up length first for HV-AUC; the net-value weight λ_B ranks below the top five for every output.",
+      "claim_zh": "在 ZDT1 和已知效用 SDM 上对设定常数做 Morris 筛选（描述性排序）：后悔值和终端 HV 最敏感的是回答噪声水平，HV-AUC 最敏感的是预热长度；净值权重 λ_B 对每个输出都排在前五名之后。",
+      "original": "图 16：触发阈值 × 成本下限网格未见系统性崩溃（5.2.3）；净值规则把预算导向正净值查询", "review3": "#14 删除；#21 保留", "change": "改写",
+      "note": "原图 16 删除，由 Morris 和 E6′ 替代；净值规则的定性表述保留。", "comments": ["R3-4", "R1-5"],
+      "evidence": [
+        {"src": "morris", "where": {"output": "regret_rec", "rank": 1}, "field": "param", "key": "top_regret", "label": "top constant, regret"},
+        {"src": "morris", "where": {"output": "terminal_hv", "rank": 1}, "field": "param", "key": "top_hv", "label": "top constant, terminal HV"},
+        {"src": "morris", "where": {"output": "hv_auc", "rank": 1}, "field": "param", "key": "top_auc", "label": "top constant, HV-AUC"},
+        {"src": "morris", "where": {"param": "p3_lambda_B"}, "field": "rank", "agg": "min", "key": "lb_best_rank", "label": "best rank of λ_B over the outputs"},
+        {"src": "morris", "where": {"output": "regret_rec"}, "field": "param", "agg": "count", "key": "n_const", "label": "constants screened"}
+      ],
+      "checks": ["top_regret == 'sigma_noise'", "top_hv == 'sigma_noise'", "top_auc == 'warmup_ticks'", "lb_best_rank > 5"]
+    },
+    {
+      "id": "U4", "layer": "uncertainty", "direction": "favourable", "status": "robust",
+      "claim_en": "Replacing the NL pipeline respondent with exact NL slot values left AdaIS's outcomes identical, and AdaIS kept lower regret than Fixed-8 under either respondent.",
+      "claim_zh": "把仿真中的 NL 解析应答换成精确槽值后，AdaIS 的结果完全不变；两种应答下 AdaIS 的后悔值都低于 Fixed-8。",
+      "original": "—（修订新增）", "review3": "—", "change": "新增",
+      "note": "AdaIS 几乎不选 NL 通道（见 A11），所以结果不变。", "comments": ["R2-5", "R4-4"],
+      "evidence": [
+        {"s": "E6s", "a": "AdaIS|nl_exact", "b": "Fixed-8|nl_exact", "m": "regret_rec", "x": "+"},
+        {"s": "E6s", "a": "AdaIS|pipeline", "b": "Fixed-8|pipeline", "m": "regret_rec", "x": "+"},
+        {"s": "E6s", "a": "AdaIS|nl_exact", "b": "AdaIS|pipeline", "m": ["regret_rec", "terminal_hv", "C_cog"], "x": "0", "role": "context"}
+      ],
+      "checks": ["abs(ex_reg_adv) + abs(ex_hv_adv) + abs(ex_cog_adv) == 0"],
+      "keys": {
+        "ex_reg": {"s": "E6s", "a": "AdaIS|nl_exact", "b": "AdaIS|pipeline", "m": "regret_rec"},
+        "ex_hv": {"s": "E6s", "a": "AdaIS|nl_exact", "b": "AdaIS|pipeline", "m": "terminal_hv"},
+        "ex_cog": {"s": "E6s", "a": "AdaIS|nl_exact", "b": "AdaIS|pipeline", "m": "C_cog"}
+      }
+    },
+    {
+      "id": "U5", "layer": "uncertainty", "direction": "none", "status": "null",
+      "claim_en": "Varying the NL burden coefficient κ_NL left regret and terminal HV no worse than at the default value.",
+      "claim_zh": "改变 NL 负担系数 κ_NL，后悔值和终端 HV 都不比默认值差。",
+      "original": "—（修订新增）", "review3": "—", "change": "新增", "note": "", "comments": ["R4-4", "R3-4"],
+      "evidence": [
+        {"s": "E6s", "a": ["AdaIS|kappa_nl0.08", "AdaIS|kappa_nl0.15", "AdaIS|kappa_nl0.25", "AdaIS|kappa_nl0.40"], "b": "AdaIS|pipeline", "m": ["regret_rec", "terminal_hv"], "x": ">=0"}
+      ]
+    },
+    {
+      "id": "U6", "layer": "uncertainty", "direction": "favourable", "status": "robust",
+      "claim_en": "Under every scanned monitor setting (quality-score weights α1, α3 and thresholds τ_Q), AdaIS kept lower burden and weight-recovery error than NoQ under corruption.",
+      "claim_zh": "在扫描的每一组监测器设定下（质量分权重 α1、α3 和阈值 τ_Q），共同污染时 AdaIS 的负担和权重恢复误差都低于 NoQ。",
+      "original": "—（修订新增）", "review3": "—", "change": "新增", "note": "", "comments": ["R1-5", "R4-6"],
+      "evidence": [
+        {"s": "E6s", "a": ["AdaIS|quality_a10.4_a30.0", "AdaIS|quality_a10.4_a30.8", "AdaIS|quality_a10.8_a30.0", "AdaIS|quality_a11.2_a30.0", "AdaIS|quality_a11.2_a30.8", "AdaIS|tauQ0.45-0.15", "AdaIS|tauQ0.65-0.35"], "b": "NoQ|default", "m": ["C_cog", "w_err_l1"], "x": "+"}
+      ]
+    },
+    {
+      "id": "U7", "layer": "uncertainty", "direction": "adverse", "status": "directional",
+      "claim_en": "Tightening the monitor thresholds τ_Q lowered burden and interactions further, with a directional loss in terminal HV.",
+      "claim_zh": "收紧监测器阈值 τ_Q 后负担和交互进一步降低，终端 HV 有方向性的下降。",
+      "original": "—（修订新增；结果审阅第五节第 1 项）", "review3": "—", "change": "新增（不利，方向性）",
+      "note": "第五节写终端 HV 低 0.202；按种子聚类后不显著（4/10，第八节）。", "comments": ["R1-5"],
+      "evidence": [
+        {"s": "E6s", "a": "AdaIS|tauQ0.65-0.35", "b": "AdaIS|default", "m": "terminal_hv", "x": "-"},
+        {"s": "E6s", "a": "AdaIS|tauQ0.65-0.35", "b": "AdaIS|default", "m": ["C_cog", "N_int"], "x": "+", "role": "context"}
+      ]
+    },
+    {
+      "id": "U8", "layer": "uncertainty", "direction": "favourable", "status": "robust",
+      "claim_en": "Under linear, saturating and step fatigue, the monitor's advantages over NoQ and Random-C in weight recovery and burden held, with no detectable difference in regret or terminal HV.",
+      "claim_zh": "在线性、饱和、阶跃三种疲劳形式下，监测器在权重恢复和负担上对 NoQ、Random-C 的优势都成立，后悔值和终端 HV 无可检测差异。",
+      "original": "—（修订新增）", "review3": "—", "change": "新增", "note": "", "comments": ["R3-4"],
+      "evidence": [
+        {"s": "E6f", "scope": ["linear", "saturating", "step"], "b": ["NoQ", "Random-C"], "m": ["w_err_l1", "C_cog"], "x": "+"},
+        {"s": "E6f", "scope": ["linear", "saturating", "step"], "b": ["NoQ", "Random-C"], "m": ["regret_rec", "terminal_hv"], "x": "0", "role": "context"}
+      ]
+    },
+    {
+      "id": "L1", "layer": "e10", "main": true, "direction": "none", "status": "descriptive",
+      "claim_en": "With LLM-based decision-maker agents answering in place of the SDM, the AdaIS minus Fixed-8 effects on regret, terminal HV and burden had the same sign as for the SDM twins in most persona-seed pairs.",
+      "claim_zh": "用 LLM 智能体决策者替代 SDM 作答时，AdaIS 减 Fixed-8 在后悔值、终端 HV 和负担上的效应，多数画像 × 种子对与 SDM 对照组同号。",
+      "original": "—（修订新增，E10′）", "review3": "—", "change": "新增", "note": "E10′ 只作模型外检验，不是人类证据。", "comments": ["R1-1", "R2-1", "R3-3", "R4-1"],
+      "evidence": [
+        {"src": "e10_dir", "where": {"effect": "d_regret_rec"}, "field": "same_sign", "key": "s_reg", "label": "same sign, regret"},
+        {"src": "e10_dir", "where": {"effect": "d_terminal_hv"}, "field": "same_sign", "key": "s_hv", "label": "same sign, terminal HV"},
+        {"src": "e10_dir", "where": {"effect": "d_C_cog"}, "field": "same_sign", "key": "s_cog", "label": "same sign, burden"},
+        {"src": "e10_dir", "where": {"effect": "d_regret_rec"}, "field": "n_pairs", "key": "n_pairs", "label": "persona-seed pairs"}
+      ],
+      "checks": ["s_reg / n_pairs > 0.5", "s_hv / n_pairs > 0.5", "s_cog / n_pairs > 0.5"]
+    },
+    {
+      "id": "L2", "layer": "e10", "direction": "none", "status": "descriptive",
+      "claim_en": "For Persona C (low-drag target), AdaIS's regret was higher than under Fixed-8 in most seeds, for the LLM-based decision-maker agents and for the SDM twins alike.",
+      "claim_zh": "对画像 C（低阻力目标），无论 LLM 智能体决策者还是 SDM 对照组，多数种子上 AdaIS 的后悔值都高于 Fixed-8。",
+      "original": "—（修订新增，E10′）", "review3": "—", "change": "新增（不利）", "note": "与 P-edge 的边界条件（E2）一致。", "comments": ["R1-9"],
+      "evidence": [
+        {"src": "e10_pair", "where": {"persona": "P3", "source": "agent"}, "field": "d_regret_rec", "agg": "count_pos", "key": "p3a_pos", "label": "Persona C agent seeds with higher AdaIS regret"},
+        {"src": "e10_pair", "where": {"persona": "P3", "source": "agent"}, "field": "d_regret_rec", "agg": "count", "key": "p3a_n", "label": "Persona C agent seeds"},
+        {"src": "e10_pair", "where": {"persona": "P3", "source": "sdm"}, "field": "d_regret_rec", "agg": "count_pos", "key": "p3s_pos", "label": "Persona C SDM-twin seeds with higher AdaIS regret"},
+        {"src": "e10_pair", "where": {"persona": "P3", "source": "sdm"}, "field": "d_regret_rec", "agg": "count", "key": "p3s_n", "label": "Persona C SDM-twin seeds"}
+      ],
+      "checks": ["p3a_pos / p3a_n > 0.5", "p3s_pos / p3s_n > 0.5"]
+    },
+    {
+      "id": "L3", "layer": "e10", "direction": "none", "status": "descriptive",
+      "claim_en": "The ROI-channel mapping assumed by the implementation did not hold for the LLM-based decision-maker agents: none of their ROI boxes overlapped the current population, whereas all of the SDM twins' boxes did.",
+      "claim_zh": "实现中假设的 ROI 通道映射对 LLM 智能体决策者不成立：它们的 ROI 框没有一个与当前种群重叠，而 SDM 对照组的框全部重叠。",
+      "original": "—（修订新增；结果审阅第五节第 4 项）", "review3": "—", "change": "新增（不利）", "note": "写进 R2-5 和 E10′ 小节。", "comments": ["R2-5"],
+      "evidence": [
+        {"src": "e10_ch", "where": {"source": "agent", "channel": "roi"}, "field": "roi_overlaps_population", "key": "roi_agent", "label": "agents: share of ROI boxes overlapping the population"},
+        {"src": "e10_ch", "where": {"source": "agent", "channel": "roi"}, "field": "n_answers", "label": "agents: ROI answers"},
+        {"src": "e10_ch", "where": {"source": "sdm", "channel": "roi"}, "field": "roi_overlaps_population", "key": "roi_sdm", "label": "SDM twins: share of ROI boxes overlapping the population"}
+      ],
+      "checks": ["roi_agent == 0", "roi_sdm == 1"]
+    },
+    {
+      "id": "L4", "layer": "e10", "direction": "none", "status": "descriptive",
+      "claim_en": "Pairwise and ranking answers of the LLM-based decision-maker agents agreed with the persona's noise-free answer less often than those of the SDM twins.",
+      "claim_zh": "LLM 智能体决策者的成对比较和排序回答与画像无噪声答案的一致率，都低于 SDM 对照组。",
+      "original": "—（修订新增，E10′）", "review3": "—", "change": "新增",
+      "note": "成对一致率以脚本输出为准（回复方案 v0.4 的 62% 作废）。", "comments": ["R2-5", "R3-3"],
+      "evidence": [
+        {"src": "e10_ch", "where": {"source": "agent", "channel": "pairwise"}, "field": "agreement_or_iou", "key": "pw_a", "label": "agents: pairwise agreement"},
+        {"src": "e10_ch", "where": {"source": "sdm", "channel": "pairwise"}, "field": "agreement_or_iou", "key": "pw_s", "label": "SDM twins: pairwise agreement"},
+        {"src": "e10_ch", "where": {"source": "agent", "channel": "ranking"}, "field": "agreement_or_iou", "key": "rk_a", "label": "agents: ranking agreement"},
+        {"src": "e10_ch", "where": {"source": "sdm", "channel": "ranking"}, "field": "agreement_or_iou", "key": "rk_s", "label": "SDM twins: ranking agreement"}
+      ],
+      "checks": ["pw_a < pw_s", "rk_a < rk_s"]
+    },
+    {
+      "id": "W1", "paper": false, "layer": "aero", "direction": "favourable", "status": "not supported",
+      "claim_en": "The simulated decision maker was calibrated on 30 live elicitation sessions with three senior engineers.",
+      "claim_zh": "模拟决策者由三位资深工程师的 30 次现场会话标定。",
+      "original": "模拟决策者由三位工程师 30 次会话标定（摘要、引言、结论）", "review3": "#2 删除", "change": "删除",
+      "note": "路线 B：没有会话记录，按更正说明删除。", "comments": ["R1-1", "R1-2", "R2-1"],
+      "evidence": []
+    },
+    {
+      "id": "W2", "paper": false, "layer": "aero", "direction": "favourable", "status": "directional",
+      "claim_en": "Terminal HV is higher than under count-matched Random-T (submitted: +37.3%).",
+      "claim_zh": "次数匹配下终端 HV 高于 Random-T（原稿 +37.3%）。",
+      "original": "次数匹配下终端 HV 比 Random-T 高 37.3%（22.7–54.8%）（摘要、5.2.3、结论）", "review3": "#3 改写", "change": "删除",
+      "note": "只剩方向性的点估计，37.3% 删除；改写后的表述见 A3。", "comments": ["AE"],
+      "evidence": [
+        {"s": "E1", "b": "Random-T", "m": "terminal_hv", "x": "+"}
+      ]
+    },
+    {
+      "id": "W3", "paper": false, "layer": "aero", "direction": "favourable", "status": "directional",
+      "claim_en": "Response latency is lower than under VoI-Timing-MC (submitted: -3.0%).",
+      "claim_zh": "响应时延低于 VoI-Timing-MC（原稿 −3.0%）。",
+      "original": "对 VoI-MC 时延低 3.0%（摘要、5.2.3、结论）", "review3": "#5 改写", "change": "删除",
+      "note": "不显著，删除。", "comments": ["R4-7"],
+      "evidence": [
+        {"s": "E1", "b": "VoI-MC", "m": "T_resp", "x": "+"}
+      ]
+    },
+    {
+      "id": "W4", "paper": false, "layer": "aero", "direction": "none", "status": "not supported",
+      "claim_en": "AdaIS never selected the NL clarification channel.",
+      "claim_zh": "AdaIS 从未选中文字澄清通道。",
+      "original": "图 15：NL 从未被选中", "review3": "#13 改写", "change": "删除",
+      "note": "实际有运行选中了 NL，见 A11。", "comments": ["R2-8"],
+      "evidence": [
+        {"src": "process", "where": {"matrix": "p3_core", "method": "AdaIS"}, "field": "runs_with_nl", "key": "ada_nl", "label": "AdaIS runs selecting NL"}
+      ],
+      "checks": ["ada_nl == 0"]
+    },
+    {
+      "id": "W5", "paper": false, "layer": "aero", "direction": "none", "status": "not supported",
+      "claim_en": "VoI-Timing-MC exhausted its budget before the last third in all of its runs.",
+      "claim_zh": "VoI-Timing-MC 全部运行都在最后三分之一前耗尽预算。",
+      "original": "图 15：VoI-MC 全部 90 个运行在最后三分之一前耗尽预算，最晚 tick 49", "review3": "#13 改写", "change": "删除",
+      "note": "改为 A11 的描述。", "comments": ["R4-7"],
+      "evidence": [
+        {"src": "process", "where": {"matrix": "p3_core", "method": "VoI-MC"}, "field": "exhausted_before_last_third", "key": "voi_exh", "label": "VoI-MC share of runs exhausted before the last third"}
+      ],
+      "checks": ["voi_exh == 1"]
+    },
+    {
+      "id": "W6", "paper": false, "layer": "benchmark", "direction": "favourable", "status": "not supported",
+      "claim_en": "Adaptive timing contributes terminal performance on the benchmarks (submitted: AdaIS has the highest terminal HV ratio).",
+      "claim_zh": "自适应时机贡献基准上的终端性能（原稿：AdaIS 终端 HV 比率最高）。",
+      "original": "基准消融：自适应时机贡献终端性能（摘要、5.1）；AdaIS 的终端 HV 比率最高（0.981）（5.1、图 3、4）", "review3": "#4、#8 改写", "change": "删除",
+      "note": "改写后的表述见 B2、B4、B5。", "comments": ["R1-9"],
+      "evidence": [
+        {"s": "B", "scope": ["BNH", "TNK", "ZDT1", "ZDT2", "ZDT3"], "b": "NoT", "m": "terminal_hv", "x": "+"}
+      ]
+    },
+    {
+      "id": "W7", "vs_review3": "#17 第三节为“改写或删除”，本表选删除。", "paper": false, "layer": "aero", "direction": "favourable", "status": "not supported",
+      "claim_en": "AdaIS is outermost on terminal quality in the radar chart (higher terminal HV than VoI-Timing-MC).",
+      "claim_zh": "雷达图中 AdaIS 在终端质量上最外圈（终端 HV 高于 VoI-Timing-MC）。",
+      "original": "图 18 雷达图：AdaIS 在终端质量和 HV-AUC 上最外圈", "review3": "#17 改写或删除", "change": "删除",
+      "note": "终端 HV 均值低于 VoI-MC（差异不显著），删除该句。", "comments": ["R3-10"],
+      "evidence": [
+        {"s": "E1", "b": "VoI-MC", "m": "terminal_hv", "x": "+"}
+      ]
+    },
+    {
+      "id": "W8", "paper": false, "layer": "aero", "direction": "none", "status": "null",
+      "claim_en": "In the nominal SAV-AERO ablation, AdaIS and NoQ show no difference in terminal HV.",
+      "claim_zh": "SAV-AERO 名义消融中 AdaIS 与 NoQ 的终端 HV 无差别。",
+      "original": "气动名义消融：AdaIS 与 NoQ 名义 HV 无差别（5.2.2、图 9）", "review3": "#11 改写（不利）", "change": "改写",
+      "note": "按规则判为无可检测差异，但点估计明显偏向 NoQ（5/10 个种子），按 R1-11 不写“无差别”，改写为 A9。", "comments": ["R1-11"],
+      "evidence": [
+        {"s": "E8", "b": "NoQ", "m": "terminal_hv", "x": "0"}
+      ]
+    },
+    {
+      "id": "W9", "paper": false, "layer": "uncertainty", "direction": "favourable", "status": "not supported",
+      "claim_en": "A trigger-threshold by cost-floor grid shows no systematic collapse.",
+      "claim_zh": "触发阈值 × 成本下限网格未见系统性崩溃。",
+      "original": "图 16：触发阈值 × 成本下限网格未见系统性崩溃（5.2.3）", "review3": "#14 删除", "change": "删除",
+      "note": "P3 没有这组网格运行，由 Morris（U3）和 E6′（U1、U2）替代。", "comments": ["R3-4"],
+      "evidence": []
+    },
+    {
+      "id": "W10", "paper": false, "layer": "corruption", "direction": "favourable", "status": "not supported",
+      "claim_en": "The monitor lowered the flagged-event rate under common corruption.",
+      "claim_zh": "共同污染下监测器降低了标记事件率。",
+      "original": "监测器把标记事件率从 0.380 降到 0.243（摘要、5.2.2、结论）", "review3": "#6 改写", "change": "删除",
+      "note": "标记事件率由监测器自己产生，是循环终点，不再作为证据；改用 K1、K2 的独立终点。", "comments": ["R4-5", "R4-6"],
+      "evidence": []
+    },
+    {
+      "id": "W11", "paper": false, "layer": "host", "direction": "favourable", "status": "not supported",
+      "claim_en": "The scheduler's advantages are optimizer-agnostic (they transfer to a single-generator host).",
+      "claim_zh": "调度器的优势与优化器无关（能迁移到单生成器宿主）。",
+      "original": "optimizer-agnostic / optimizer-decoupled（摘要、贡献 1、结论）", "review3": "#1 改写", "change": "改写",
+      "note": "解耦只在架构层面成立；实证见 H1–H3。", "comments": ["R1-3", "R3-9"],
+      "evidence": [
+        {"s": "E5", "scope": "single_nsga2/SAV-AERO", "b": "VoI-MC", "m": ["regret_rec", "terminal_hv"], "x": "+"}
+      ]
+    }
+  ]
+}

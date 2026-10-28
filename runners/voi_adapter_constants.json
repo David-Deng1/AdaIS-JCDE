@@ -1,0 +1,22 @@
+{
+  "method_name": "VoI-Timing-Adapter",
+  "particle_count": 2048,
+  "archive_cap": 30,
+  "ewma_window": 5,
+  "warmup_ticks": 8,
+  "query_cost": 1.0,
+  "continuation_cost": 1.0,
+  "augmented_tchebycheff_rho": 0.05,
+  "noise_mapping": {
+    "sigma_noise": 0.1,
+    "likelihood": "logistic",
+    "logistic_scale": 0.1
+  },
+  "seed_namespaces": {
+    "particle_prior": 51000,
+    "pair_tie_break": 52000,
+    "simulated_dm": 0
+  },
+  "frozen_before_compatibility_gate": true,
+  "report_matrix_tuning_allowed": false
+}

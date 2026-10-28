@@ -1,0 +1,11 @@
+# Versions used for the paper (Python 3.14.3). torch and pulp are optional and not needed for any reported result.
+numpy==2.4.2
+pandas==3.0.1
+scipy==1.17.1
+pymoo==0.6.1.6
+scikit-learn==1.8.0
+SALib==1.5.2
+matplotlib==3.10.8
+pydantic==2.12.5
+PyYAML==6.0.3
+dash==4.0.0
