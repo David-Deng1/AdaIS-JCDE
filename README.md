@@ -2,7 +2,13 @@
 
 Code for the paper *AdaIS: Adaptive Interaction Scheduling with Feedback-Quality Monitoring for Human-in-the-Loop Computational Engineering Design Optimization* (Journal of Computational Design and Engineering, manuscript JCDE-2026-572).
 
-Zenodo record for the run outputs, the analysis outputs, the materials of the out-of-model check and this code (`AdaIS-JCDE-code.zip`): https://doi.org/10.5281/zenodo.23730934. Code repository: https://github.com/David-Deng1/AdaIS-JCDE. All results in the paper come from simulation. No data from human participants are included or analysed.
+The original simulation and out-of-model-check archive, including this code (`AdaIS-JCDE-code.zip`), is available at https://doi.org/10.5281/zenodo.23730934. Code repository: https://github.com/David-Deng1/AdaIS-JCDE. That archive contains simulated and external-agent responses. The separate human-pilot supporting records described in the revised manuscript are supplied with the journal submission and are not included in this public repository.
+
+## Channel-availability study added for revision
+
+The complete channel-availability archive for manuscript JCDE-2026-572 is available in the [versioned release](https://github.com/David-Deng1/AdaIS-JCDE/releases/tag/channel-availability-r1-20261108) as `JCDE-2026-572_File_S5_data.zip`. It contains full AdaIS and five single-channel removals on 90 matched blocks each (540 planned simulations), the frozen protocol, a self-contained code snapshot, portable specifications, retained run outputs and recovery records, integrity checks, full-precision analysis, Figure 16 source data and reproduction scripts. `SHA256SUMS.txt` is provided with the release. Extract the archive and follow its own `README.md`.
+
+This archive contains simulated responses. Its code snapshot is separate from the main-branch implementation described below, and its 540-run study is separate from the earlier 9,410-run Zenodo archive. The smaller supporting datasets and the consolidated Supplementary Material are supplied with the revised journal submission.
 
 ## Contents
 
